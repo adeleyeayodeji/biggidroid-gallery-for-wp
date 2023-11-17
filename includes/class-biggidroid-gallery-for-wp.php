@@ -15,6 +15,23 @@ class BiggiDroid_Gallery_For_WP
         add_action('init', array($this, 'registerPostType'));
         //add meta box
         add_action('add_meta_boxes', array($this, 'addMetaBox'));
+        //enqueue scripts
+        add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
+    }
+
+    /**
+     * Enqueue scripts
+     */
+    public function enqueueScripts($hook)
+    {
+        //check if post type is biggidroid_gallery
+        if ($hook == 'post-new.php' || $hook == 'post.php') {
+            global $post;
+            if ($post->post_type == 'biggidroid_gallery') {
+                //enqueue scripts wp upload media
+                wp_enqueue_media();
+            }
+        }
     }
 
     /**
@@ -73,7 +90,7 @@ class BiggiDroid_Gallery_For_WP
             'labels' => $labels,
             'description' => "BiggiDroid Gallery for WordPress",
             'show_ui' => true,
-            'supports' => ['title']
+            'supports' => ['title'],
         ];
 
         //register
