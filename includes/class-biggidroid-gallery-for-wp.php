@@ -13,6 +13,34 @@ class BiggiDroid_Gallery_For_WP
     {
         //add action init
         add_action('init', array($this, 'registerPostType'));
+        //add meta box
+        add_action('add_meta_boxes', array($this, 'addMetaBox'));
+    }
+
+    /**
+     * Add meta box
+     */
+    public function addMetaBox()
+    {
+        add_meta_box(
+            'biggidroid_gallery_meta_box',
+            'Add Images',
+            array($this, 'renderMetaBox'),
+            'biggidroid_gallery',
+            'normal',
+            'high'
+        );
+    }
+
+    /**
+     * Render meta box
+     */
+    public function renderMetaBox($post)
+    {
+        ob_start();
+        include_once BIGGIDROID_GALLERY_FOR_WP_DIR . '/templates/add_images.php';
+        $output = ob_get_clean();
+        echo $output;
     }
 
     /**
@@ -20,11 +48,32 @@ class BiggiDroid_Gallery_For_WP
      */
     public function registerPostType()
     {
+
+        //$labels
+        $labels = [
+            'name' => "Gallery",
+            'singular_name' => "Gallery",
+            'menu_name' => "BiggiDroid Gallery",
+            'name_admin_bar' => "BiggiDroid Gallery",
+            'add_new' => "Add New Gallery",
+            'add_new_item' => "Add New Gallery",
+            'new_item' => "New Gallery",
+            'edit_item' => "Edit Gallery",
+            'view_item' => "View Gallery",
+            'all_items' => "All Gallery",
+            'search_items' => "Search Gallery",
+            'parent_item_colon' => "Parent Gallery:",
+            'not_found' => "No Gallery found.",
+            'not_found_in_trash' => "No Gallery found in Trash.",
+        ];
+
         //args
         $args = [
             'label' => "BiggiDroid Gallery",
+            'labels' => $labels,
             'description' => "BiggiDroid Gallery for WordPress",
             'show_ui' => true,
+            'supports' => ['title']
         ];
 
         //register
