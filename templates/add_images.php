@@ -16,6 +16,7 @@ if (!defined('WPINC')) {
         display: flex;
         justify-content: flex-start;
         align-items: center;
+        margin-bottom: 10px;
     }
 
     .biggidroid-gallery-container-body-flex img {
@@ -46,24 +47,39 @@ if (!defined('WPINC')) {
     </div>
     <!-- body -->
     <div class="biggidroid-gallery-container-body">
-        <div class="biggidroid-gallery-container-body-flex">
-            <img src="https://plus.unsplash.com/premium_photo-1683141316518-70595b251f01?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
-            <p class="removeImage">
-                Remove
-            </p>
-        </div>
+        <?php
+        //get biggidroidImages
+        $biggidroidImages = get_post_meta($post->ID, 'biggidroidImages', true);
+        //decode data
+        $biggidroidImages = json_decode($biggidroidImages);
+        //loop through
+        foreach ($biggidroidImages as $biggidroidImage) :
+        ?>
+            <div class="biggidroid-gallery-container-body-flex">
+                <input type="hidden" name="biggidroidImages[]" value="<?php echo $biggidroidImage; ?>">
+                <img src="<?php echo $biggidroidImage; ?>" alt="">
+                <p class="removeImage" onclick="removeImageBiggiDroidGallery(this, event)">
+                    Remove
+                </p>
+            </div>
+        <?php
+        endforeach;
+        ?>
     </div>
 </div>
 
 <script>
-    jQuery(document).ready(function($) {
-        //add click event
-        $(".removeImage").click(function(e) {
-            e.preventDefault();
-            //log
-            console.log("remove image");
+    //add on click event 
+    let removeImageBiggiDroidGallery = (elem, e) => {
+        e.preventDefault();
+        jQuery(document).ready(function($) {
+            var element = $(elem);
+            //remove the parent element
+            element.parent().remove();
         });
+    }
 
+    jQuery(document).ready(function($) {
         $(".biggidroid-add-image").click(function(e) {
             e.preventDefault();
             //load wp media
@@ -78,8 +94,21 @@ if (!defined('WPINC')) {
             //on select
             mediaUploader.on("select", function() {
                 var attachment = mediaUploader.state().get("selection").first().toJSON();
-                //log
-                console.log(attachment);
+                //image url
+                var imageUrl = attachment.url;
+                //append to biggidroid-gallery-container-body
+                $(".biggidroid-gallery-container-body").append(
+                    `
+                        <div class="biggidroid-gallery-container-body-flex">
+                            <input type="hidden" name="biggidroidImages[]" value="${imageUrl}">
+                            <img src="${imageUrl}" alt="${attachment.alt}">
+                            <p class="removeImage" onclick="removeImageBiggiDroidGallery(this, event)">
+                                Remove
+                            </p>
+                        </div>
+                    
+                    `
+                );
             });
 
             //open
