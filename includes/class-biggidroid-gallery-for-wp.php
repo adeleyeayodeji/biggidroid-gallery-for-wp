@@ -19,6 +19,51 @@ class BiggiDroid_Gallery_For_WP
         add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
         //save post hook
         add_action('save_post', array($this, 'savePost'), 10, 2);
+        //add shortcode
+        add_shortcode('biggidroid_gallery', array($this, 'shortcode'));
+        //enqueue scripts to frontend
+        add_action('wp_enqueue_scripts', array($this, 'enqueueScriptsFrontend'));
+    }
+
+    /**
+     * enqueueScriptsFrontend
+     */
+    public function enqueueScriptsFrontend()
+    {
+        //css for lightgallery
+        wp_enqueue_style('biggidroid-gallery-lightgallery', BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/css/light-gallery.css', [], BIGGIDROID_GALLERY_FOR_WP_VERSION, 'all');
+        //js for lightgallery
+        wp_enqueue_script('biggidroid-gallery-lightgallery', BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/js/light-gallery.js', ['jquery'], BIGGIDROID_GALLERY_FOR_WP_VERSION, true);
+        //add biggidroid-core js
+        wp_enqueue_script('biggidroid-core', BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/js/biggidroid-core.js', ['jquery'], BIGGIDROID_GALLERY_FOR_WP_VERSION, true);
+    }
+
+    /**
+     * Shortcode callback function
+     */
+    public function shortcode($atts)
+    {
+        //get the shortcode attributes
+        $shortCodeAtt = shortcode_atts([
+            "title" => "BiggiDroid Gallery",
+            "id" => 200
+        ], $atts, "biggidroid_gallery");
+        //get images post meta
+        $biggidroidImages = get_post_meta($shortCodeAtt['id'], 'biggidroidImages', true);
+        //check if its empty
+        if (empty($biggidroidImages)) return false;
+        //decode the $biggidroidImages
+        $biggidroidImages = json_decode($biggidroidImages);
+        //title
+        $title = $shortCodeAtt['title'];
+        //start buffering
+        ob_start();
+        //include the template
+        include_once BIGGIDROID_GALLERY_FOR_WP_DIR . '/templates/shortcode-frontend.php';
+        //get the content
+        $content = ob_get_clean();
+        //return content
+        return $content;
     }
 
     /**
@@ -74,6 +119,26 @@ class BiggiDroid_Gallery_For_WP
             'normal',
             'high'
         );
+
+        //add short code
+        add_meta_box(
+            'biggidroid_gallery_shortcode_meta_box',
+            'Shortcode',
+            array($this, 'renderShortcodeMetaBox'),
+            'biggidroid_gallery',
+            'side'
+        );
+    }
+
+    /**
+     * renderShortcodeMetaBox
+     */
+    public function renderShortcodeMetaBox($post)
+    {
+        ob_start();
+        include_once BIGGIDROID_GALLERY_FOR_WP_DIR . '/templates/shortcode.php';
+        $output = ob_get_clean();
+        echo $output;
     }
 
     /**
