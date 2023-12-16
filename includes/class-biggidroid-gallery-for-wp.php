@@ -30,10 +30,17 @@ class BiggiDroid_Gallery_For_WP
      */
     public function enqueueScriptsFrontend()
     {
+        wp_enqueue_style('biggidroid-gallery-lightgallery', BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/css/lightgallery.css', [], BIGGIDROID_GALLERY_FOR_WP_VERSION, 'all');
+
         //css for lightgallery
-        wp_enqueue_style('biggidroid-gallery-lightgallery', BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/css/light-gallery.css', [], BIGGIDROID_GALLERY_FOR_WP_VERSION, 'all');
+        wp_enqueue_style('biggidroid-gallery-lightgallery-core', BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/css/lightgallery-core.css', [], BIGGIDROID_GALLERY_FOR_WP_VERSION, 'all');
+
+        wp_enqueue_style('biggidroid-gallery-lightgallery-lg-thumbnail', BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/css/lg-thumbnail.css', [], BIGGIDROID_GALLERY_FOR_WP_VERSION, 'all');
+
         //js for lightgallery
-        wp_enqueue_script('biggidroid-gallery-lightgallery', BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/js/light-gallery.js', ['jquery'], BIGGIDROID_GALLERY_FOR_WP_VERSION, true);
+        wp_enqueue_script('biggidroid-gallery-lightgallery', BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/lightgallery.min.js', ['jquery'], BIGGIDROID_GALLERY_FOR_WP_VERSION);
+        //thumbnail plugin
+        wp_enqueue_script('biggidroid-gallery-thumbnail', BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/plugins/thumbnail/lg-thumbnail.min.js', ['jquery'], BIGGIDROID_GALLERY_FOR_WP_VERSION);
         //add biggidroid-core js
         wp_enqueue_script('biggidroid-core', BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/js/biggidroid-core.js', ['jquery'], BIGGIDROID_GALLERY_FOR_WP_VERSION, true);
     }
