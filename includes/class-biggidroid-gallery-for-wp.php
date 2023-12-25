@@ -23,6 +23,42 @@ class BiggiDroid_Gallery_For_WP
         add_shortcode('biggidroid_gallery', array($this, 'shortcode'));
         //enqueue scripts to frontend
         add_action('wp_enqueue_scripts', array($this, 'enqueueScriptsFrontend'));
+        //add column on biggidroid_gallery post type
+        add_filter('manage_biggidroid_gallery_posts_columns', array($this, 'addColumns'));
+        //add column content on biggidroid_gallery post type
+        add_action('manage_biggidroid_gallery_posts_custom_column', array($this, 'addColumnsContent'), 10, 2);
+    }
+
+    /**
+     * addColumnsContent
+     */
+    public function addColumnsContent($column, $post_id)
+    {
+        switch ($column) {
+            case 'shortcode':
+                //shortcode
+                $shortcode = '[biggidroid_gallery id="' . $post_id . '" title="' . get_the_title($post_id) . '"]';
+                //echo into input
+                echo $shortcode;
+                break;
+            case 'author':
+                echo get_the_author_meta('display_name', get_post_field('post_author', $post_id));
+                break;
+        }
+    }
+
+    /**
+     * addColumns
+     */
+    public function addColumns($columns)
+    {
+        //unset date
+        unset($columns['date']);
+        $columns['shortcode'] = 'Shortcode';
+        //add author
+        $columns['author'] = 'Author';
+        $columns['date'] = 'Date';
+        return $columns;
     }
 
     /**
