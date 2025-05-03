@@ -102,7 +102,7 @@ class BiggiDroid_Gallery_For_WP
         //start buffering
         ob_start();
         //include the template
-        include_once BIGGIDROID_GALLERY_FOR_WP_DIR . '/templates/shortcode-frontend.php';
+        include BIGGIDROID_GALLERY_FOR_WP_DIR . '/templates/shortcode-frontend.php';
         //get the content
         $content = ob_get_clean();
         //return content

@@ -4,101 +4,87 @@ if (!defined('WPINC')) {
     exit("Do not access this file directly.");
 }
 ?>
-<link rel="stylesheet" href="<?php echo esc_url(BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/css/lightgallery.css') ?>">
-<link rel="stylesheet" href="<?php echo esc_url(BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/css/lg-zoom.css') ?>">
-<link rel="stylesheet" href="<?php echo esc_url(BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/css/justifiedGallery.css') ?>">
-<link rel="stylesheet" href="<?php echo esc_url(BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/css/lg-thumbnail.css') ?>">
-<link rel="stylesheet" href="<?php echo esc_url(BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/css/lg-share.css') ?>">
-<link rel="stylesheet" href="<?php echo esc_url(BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/css/lg-rotate.css') ?>">
-<link rel="stylesheet" href="<?php echo esc_url(BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/css/lg-autoplay.css') ?>">
-<link rel="stylesheet" href="<?php echo esc_url(BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/css/lg-fullscreen.css') ?>">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.12/css/lightgallery.min.css">
+
 <style>
-    body {
-        padding: 40px;
-        background-image: linear-gradient(#e8f0ff 0%, white 52.08%);
-        color: #0e3481;
-        min-height: 100vh;
+    .lightgallery {
+        column-count: 4;
+        column-gap: 20px;
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 10px;
     }
 
-    .gallery-info {
-        text-align: center;
+    @media (max-width: 900px) {
+        .lightgallery {
+            column-count: 2;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .lightgallery {
+            column-count: 1;
+        }
+    }
+
+    .lightgallery a {
+        display: inline-block;
+        width: 100%;
+        margin: 0 0 20px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+        transition: transform 0.2s, box-shadow 0.2s;
+        break-inside: avoid;
+        background: #fff;
+        position: relative;
+    }
+
+    .lightgallery a:hover {
+        transform: translateY(-4px) scale(1.04);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+        z-index: 2;
+    }
+
+    .lightgallery img {
+        width: 100%;
+        height: auto;
         display: block;
-        font-size: 12px;
-        opacity: 0.7;
-        font-style: italic;
+        object-fit: cover;
+        aspect-ratio: 40 / 39;
+        transition: filter 0.2s;
     }
 
-    .header .lead {
-        max-width: 620px;
-    }
-
-    /** Below CSS is completely optional **/
-
-    .gallery-item {
-        width: 200px;
-        padding: 5px;
+    .lightgallery a:hover img {
+        filter: brightness(0.95) saturate(1.1);
     }
 </style>
 
-<div class="biggidroid-gallery-frontend">
-    <div id="biggidroid-gallery-images">
-        <div class="gallery-container" id="animated-thumbnails-gallery">
-            <?php
-            //loop through $biggidroidImages
-            foreach ($biggidroidImages as $image) :
-            ?>
-                <a class="gallery-item" data-src="<?php echo esc_attr($image); ?>" data-sub-html="<h4>Photo by - <a href='https://biggidroid.com'>BiggiDroid.com </a></h4><p> Location - <a href='https://unsplash.com/s/photos/puezgruppe%2C-wolkenstein-in-gr%C3%B6den%2C-s%C3%BCdtirol%2C-italien'>Puezgruppe, Wolkenstein in Gröden, Südtirol, Italien</a>layers of blue.</p>">
-                    <img alt="layers of blue." class="img-responsive" src="<?php echo esc_attr($image); ?>" />
-                </a>
-            <?php endforeach; ?>
-        </div>
-    </div>
+<div class="lightgallery">
+    <?php foreach ($biggidroidImages as $image) : ?>
+        <a href="<?php echo esc_attr($image); ?>">
+            <img src="<?php echo esc_attr($image); ?>" loading="lazy" />
+        </a>
+    <?php endforeach; ?>
 </div>
 
-<script src="<?php echo esc_url(BIGGIDROID_GALLERY_FOR_WP_URL . '/assets/plugins/justifiedGallery/justifiedGallery.js') ?>"></script>
-<script type="module">
-    // import lightGallery from "https://cdn.skypack.dev/lightgallery@2.1.2";
+<!-- JS dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.12/dist/js/lightgallery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lg-thumbnail/1.1.0/lg-thumbnail.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lg-fullscreen/1.1.0/lg-fullscreen.min.js"></script>
 
-    // import lgZoom from "https://cdn.skypack.dev/lightgallery@2.1.2/plugins/zoom";
-
-    // import lgThumbnail from "https://cdn.skypack.dev/lightgallery@2.1.2/plugins/thumbnail";
-
-    // import lgShare from "https://cdn.skypack.dev/lightgallery@2.1.2/plugins/share";
-
-    // import lgRotate from "https://cdn.skypack.dev/lightgallery@2.1.2/plugins/rotate";
-
-    // import lgAutoplay from "https://cdn.skypack.dev/lightgallery@2.1.2/plugins/autoplay";
-    // import lgFullscreen from "https://cdn.skypack.dev/lightgallery@2.1.2/plugins/fullscreen";
-
-    jQuery("#animated-thumbnails-gallery")
-        .justifiedGallery({
-            captions: false,
-            lastRow: "hide",
-            rowHeight: 180,
-            margins: 5
-        })
-        .on("jg.complete", function() {
-            lightGallery(document.getElementById("animated-thumbnails-gallery"), {
-                autoplayFirstVideo: false,
-                pager: false,
-                galleryId: "nature",
-                flipHorizontal: false,
-                flipVertical: false,
-                rotateLeft: false,
-                plugins: [
-                    // lgZoom,
-                    // lgThumbnail,
-                    // lgShare,
-                    // lgRotate,
-                    // lgFullscreen,
-                    // lgAutoplay
-                ],
-                mobileSettings: {
-                    controls: false,
-                    showCloseIcon: false,
-                    download: false,
-                    rotate: false
-                }
+<script>
+    jQuery(document).ready(function($) {
+        //get all div .lightgallery
+        $('.lightgallery').each(function(index, element) {
+            // element == this
+            $(this).lightGallery({
+                selector: 'a',
+                thumbnail: true,
+                fullscreen: true,
             });
         });
+    });
 </script>
